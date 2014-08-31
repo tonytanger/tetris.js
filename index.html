@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Tetris
+	</title>
+	<style>
+		body {
+		}
+		#board {
+			font-family: monospace;
+			font-size: 14px;
+		}
+		#board, #board th, #board td.board_title {
+			border: 1px black solid;
+		}
+		.block_i, .block_j, .block_l, .block_z, .block_o, .block_s, .block_t {
+			border: 1px black solid;
+			font-weight: bold;
+		}
+		.block_x { /* black */
+			background-color: #BDBDBD;
+			color: #BDBDBD;
+		}
+		.block_i { /* cyan */
+			background-color: #81F7F3;
+			color: #81F7F3;
+		}
+		.block_j { /* blue */
+			background-color: #58ACFA;
+			color: #58ACFA;
+		}
+		.block_l { /* orange */
+			background-color: #FFBF00;
+			color: #FFBF00;
+		}
+		.block_o { /* yellow */
+			background-color: #FFF300;
+			color: #FFF300;
+		}
+		.block_s { /*green*/
+			background-color: #2EFE2E;
+			color: #2EFE2E;
+		}
+		.block_t { /*purple*/
+			background-color: #D358F7;
+			color: #D358F7;
+		}
+		.block_z { /*red*/
+			background-color: #FA5858;
+			color: #FA5858;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="board_wrapper">
+
+	</div>
+	<div id="next_piece">
+	</div>
+<script src="block.js"></script>
+<script src="board.js"></script>
+<script src="tetromino.js"></script>
+<script src="tetromino_blocks.js"></script>
+<script src="keyboard.js"></script>
+<script src="level.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
