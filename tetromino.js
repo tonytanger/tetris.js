@@ -16,6 +16,7 @@ function Tetromino() {
 	for(var i = 0; i < 4; i++) {
 		this.innerBlocks[i] = new Block();
 	}
+	this.ghostRow = 0;
 }
 
 Tetromino.prototype.print = function() {
@@ -24,6 +25,10 @@ Tetromino.prototype.print = function() {
 		returnString += this.blocks[i].print();
 	}
 	return returnString;
+};
+
+Tetromino.prototype.printGhost = function() {
+	// body...
 };
 
 Tetromino.prototype.rotate = function() {
@@ -291,3 +296,17 @@ function cancelRotate(tetromino) {
 		tetromino.state = 3;
 	}
 }
+
+Tetromino.prototype.findGhostRow = function() {
+	for(var i = 0; i < 4; i++) {
+		for(var j = 24; j > this.ghostRow; j--) {
+			if(this.innerBlocks[i].row + j < 22 && this.board.getBlock(this.innerBlocks[i].row + j, this.innerBlocks[i].col + this.col).isDead()) {
+				this.ghostRow = j;
+				break;
+			}	
+		}
+	}
+	return true;
+};
+
+// add a method to point tothe right blocks in the board as ghosts

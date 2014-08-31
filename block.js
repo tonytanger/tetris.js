@@ -1,4 +1,5 @@
 var DEFAULT_BLOCK = 'x';
+var GHOST_BLOCK = 'g'
 
 // Block Constructor
 function Block() {
@@ -29,7 +30,7 @@ Block.prototype.setAlive = function(blockType) {
 };
 
 Block.prototype.isDead = function() {
-	return this.blockType === DEFAULT_BLOCK;
+	return this.blockType === DEFAULT_BLOCK || this.blockType === GHOST_BLOCK;
 };
 
 Block.prototype.isAlive = function() {

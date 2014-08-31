@@ -3,7 +3,7 @@ function Level() {
 	this.seed = 0;
 	this.blockInQueue = 0;
 	this.nextBlock = 0;
-	this.lockDelay = 3000;
+	this.lockDelay = 1000;
 }
 
 Level.prototype.getLevel = function() {

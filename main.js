@@ -21,6 +21,7 @@ function gameLoop(myInt) {
 			clearInterval(myInt);
 			deactivateKeyboard();
 			console.log("GAME OVER!");
+			document.getElementById("game_over").style.zIndex = "150";
 		}
 		updateBoard();
 	}
@@ -28,10 +29,8 @@ function gameLoop(myInt) {
 }
 var downInterval = setInterval(function() {gameLoop(downInterval)}, level.lockDelay);
 
-
-
 function updateBoard() {
-	document.getElementById("board_wrapper").innerHTML = tetrisBoard.print();
+	document.getElementById("board_wrapper").innerHTML = tetrisBoard.print()
 }
 
 		//document.getElementById("board").innerHTML = tetrisBoard.print();

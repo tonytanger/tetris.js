@@ -20,22 +20,22 @@ Board.prototype.print = function() {
 	var returnString = "<table id='board'>";
 	for(var i = 0; i < this.height; i++) {
 		// print top number markers
-		if(i === 0) {
-			returnString += "<tr><th class='board_title'>G</th>";
-			for(var k = 0; k < this.width; k++) {
-				returnString += "<th>" + k + "</th>";
-			}
-			returnString += "</tr>";
-		}
+		// if(i === 0) {
+		// 	returnString += "<tr><th class='board_title'>G</th>";
+		// 	for(var k = 0; k < this.width; k++) {
+		// 		returnString += "<th>" + k + "</th>";
+		// 	}
+		// 	returnString += "</tr>";
+		// }
 		if(i === 0 || i === 1) {
 			continue;
 		}
 		returnString += "<tr>"
-		if(i < 10) {
-			returnString += "<td class='board_title'>" + i + "</td>";
-		} else {
-			returnString += "<td class='board_title'>" + i + "</td>";
-		}
+		// if(i < 10) {
+		// 	returnString += "<td class='board_title'>" + i + "</td>";
+		// } else {
+		// 	returnString += "<td class='board_title'>" + i + "</td>";
+		// }
 		for(var j = 0; j < this.width; j++) {
 			returnString += "<td class='block_" + this.theBoard[i][j].blockType.toLowerCase() + "'>";
 			returnString += this.theBoard[i][j].print() + "";
@@ -99,3 +99,4 @@ Board.prototype.setDead = function(row, col) {
 Board.prototype.setAlive = function(row, col, blockType) {
 	this.theBoard[row][col].blockType = blockType;
 };
+

@@ -21,6 +21,7 @@ var handler = function(event) {
 		// space
 			nextBlock.drop();
 			deactivateKeyboard();
+			gameLoop(downInterval);
 			break;
 	}
 	updateBoard();
