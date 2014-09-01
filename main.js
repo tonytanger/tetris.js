@@ -32,6 +32,8 @@ function gameLoop(myInt) {
 	}
 	updateBoard();
 }
+
+// implement a way to update level,lockDelay because this setInterval will not change during the game.
 var downInterval = setInterval(function() {gameLoop(downInterval)}, level.lockDelay);
 
 function updateBoard() {

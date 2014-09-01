@@ -61,8 +61,14 @@ Level.prototype.getNextBlock = function() {
 };
 
 Level.prototype.levelUp = function() {
-	if(this.lockDelay > 100) {
-		this.lockDelay /= 2;
+	if(this.lockDelay >= 400) {
+		this.lockDelay -= 100;
+		clearInterval(downInterval);
+		setInterval(function() {gameLoop(downInterval)}, this.lockDelay);
+	} else {
+		this.lockDelay -= 50;
+		clearInterval(downInterval);
+		setInterval(function() {gameLoop(downInterval)}, this.lockDelay);
 	}
 	if(this.level < 15) {
 		this.level++;
