@@ -28,6 +28,5 @@ Level.prototype.getNextBlock = function() {
 	} else {
 		this.nextBlock = new IBlock();
 	}
-	console.log(this.nextBlock);
 	return this.nextBlock;
 };

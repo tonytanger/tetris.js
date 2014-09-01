@@ -23,6 +23,10 @@ var handler = function(event) {
 			deactivateKeyboard();
 			gameLoop(downInterval);
 			break;
+		case 88:
+		// special
+			clearInterval(downInterval);
+		break;
 	}
 	updateBoard();
 };

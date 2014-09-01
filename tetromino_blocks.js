@@ -8,7 +8,6 @@ function IBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
-
 }
 
 IBlock.prototype = Object.create(Tetromino.prototype);

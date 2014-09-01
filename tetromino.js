@@ -16,7 +16,7 @@ function Tetromino() {
 	for(var i = 0; i < 4; i++) {
 		this.innerBlocks[i] = new Block();
 	}
-	this.ghostRow = 0;
+	this.ghostRow = BOARD_HEIGHT + 1;
 }
 
 Tetromino.prototype.print = function() {
@@ -25,10 +25,6 @@ Tetromino.prototype.print = function() {
 		returnString += this.blocks[i].print();
 	}
 	return returnString;
-};
-
-Tetromino.prototype.printGhost = function() {
-	// body...
 };
 
 Tetromino.prototype.rotate = function() {
@@ -135,11 +131,18 @@ Tetromino.prototype.left = function() {
 		}
 	}
 
+	//set ghost dead
+	this.setGhostDead();
+
 	for(var i = 0; i < 4; i++) {
 		this.board.setDead(this.blocks[i].row, this.blocks[i].col);
 	}
 
 	this.col--;
+	// find new ghost
+	this.findGhostRow();
+	this.setGhostAlive();
+
 	for(var i = 0; i < 4; i++) {
 		this.blocks[i].col--;
 		this.board.setAlive(this.blocks[i].row, this.blocks[i].col, this.blocks[i].blockType);
@@ -181,11 +184,18 @@ Tetromino.prototype.right = function() {
 		}
 	}
 
+	//set ghost dead
+	this.setGhostDead();
+
 	for(var i = 0; i < 4; i++) {
 		this.board.setDead(this.blocks[i].row, this.blocks[i].col);
 	}
 
 	this.col++;
+	// find new ghost
+	this.findGhostRow();
+	this.setGhostAlive();
+
 	for(var i = 0; i < 4; i++) {
 		this.blocks[i].col++;
 		this.board.setAlive(this.blocks[i].row, this.blocks[i].col, this.blocks[i].blockType);
@@ -208,6 +218,9 @@ Tetromino.prototype.state0 = function() {
 };
 
 Tetromino.prototype.rotate = function() {
+	//set ghost dead
+
+	this.setGhostDead();
 	//check if new position is full
 	switch(this.state) {
 		case 0:
@@ -235,6 +248,8 @@ Tetromino.prototype.rotate = function() {
 		if(this.innerBlocks[i].row + this.row > 22 || this.innerBlocks[i].row + this.row < 0 || this.innerBlocks[i].col + this.col > 9 || this.innerBlocks[i].col + this.col < 0) {
 			cancelRotate(this);
 			console.warn("rotation: out of bound!");
+			//reset ghost
+			this.setGhostAlive();
 			return false;
 		}
 
@@ -253,6 +268,8 @@ Tetromino.prototype.rotate = function() {
 			// new location is occupied.
 			cancelRotate(this);
 			console.warn("rotation: location occupied!");
+			//reset ghost
+			this.setGhostAlive();
 			return false;
 		}
 	}
@@ -261,10 +278,16 @@ Tetromino.prototype.rotate = function() {
 
 	//do the rotation
 
+	//NOTE: cannot do setGhostDead() here because rotation already happened to innerBlocks
+
 	// set old positions dead
 	for(var i = 0; i < 4; i++) {
 		this.board.setDead(this.blocks[i].row, this.blocks[i].col);
 	}
+
+	// find new ghost
+	this.findGhostRow();
+	this.setGhostAlive();
 
 	// set new coordinates and set them alive
 	for(var i = 0; i < 4; i++) {
@@ -298,15 +321,85 @@ function cancelRotate(tetromino) {
 }
 
 Tetromino.prototype.findGhostRow = function() {
-	for(var i = 0; i < 4; i++) {
-		for(var j = 24; j > this.ghostRow; j--) {
-			if(this.innerBlocks[i].row + j < 22 && this.board.getBlock(this.innerBlocks[i].row + j, this.innerBlocks[i].col + this.col).isDead()) {
-				this.ghostRow = j;
-				break;
-			}	
+	// switch(this.blockType) {
+	// 	case 'J': case 'L': case 'S': case 'Z': case 'T':
+	// 	this.ghostRow = BOARD_HEIGHT;
+	// 	break;
+	// 	case 'I':
+	// 	this.ghostRow = BOARD_HEIGHT - 1 + th;
+	// 	break;
+	// 	case 'O':
+	// 	this.ghostRow = BOARD_HEIGHT - 1;
+	// 	break;
+	// }
+
+	this.ghostRow = this.board.height + 1;
+	// for(var i = 0; i < 4; i++) {
+	// 	for(var j = this.ghostRow; j > 1; j--) {
+	// 		if(this.innerBlocks[i].row + j < 22 && this.board.getBlock(this.innerBlocks[i].row + j, this.innerBlocks[i].col + this.col).isDead()) {
+	// 			this.ghostRow = j;
+	// 			break;
+	// 		}	
+	// 	}
+	// }
+	for(var i= 0; i < 4; i++) {
+		if(this.innerBlocks[i].row + this.row === this.board.height - 1){
+			this.ghostRow = this.row;
+			return this.ghostRow;
 		}
 	}
-	return true;
+
+	for(var i = 0; i < 4; i++) {
+		var isBottom = true;
+		for(var j = 0; j < 4; j++) {
+			// check if the selected block is not the same tetromino
+			// check if they are in the same column
+			// check if current blocks[i] is the lower one
+			if(this.innerBlocks[i].col === this.innerBlocks[j].col && this.innerBlocks[i].row + 1 === this.innerBlocks[j].row) {
+				isBottom = false;
+				console.log(this.innerBlocks[i].row, this.innerBlocks[i].col);
+				break;
+			}
+		}
+		if(isBottom) {
+			// find the "lowest" row that is dead
+			// console.log("Cond1: " + (this.ghostRow - this.innerBlocks[i].row));
+			// console.log("Cond2: " + this.board.height);
+			for(var j = this.innerBlocks[i].row + this.row + 1; j < this.board.height + 1; j++) {
+				//console.log(this.board.getBlock(j, this.blocks[i].col));
+				if(this.board.getBlock(j, this.innerBlocks[i].col + this.col).isAlive()) {
+					if(j - this.innerBlocks[i].row - 1 < this.ghostRow){
+						this.ghostRow = j - this.innerBlocks[i].row - 1;
+					}
+					console.log("isAlive: " + j);
+					break;
+				} else if (j === this.board.height - 1) {
+					if(this.board.height - this.innerBlocks[i].row - 1 < this.ghostRow){
+						this.ghostRow = this.board.height - this.innerBlocks[i].row - 1;
+					}
+					console.log("Reach Bottom: " + j);
+					break;
+				}
+			}
+		}
+		// console.log("count me 4 times.");
+	}
+	console.log("Ghost Row: " + this.ghostRow);
+	return this.ghostRow;
 };
 
-// add a method to point tothe right blocks in the board as ghosts
+// add a method to point to the right blocks in the board as ghosts
+Tetromino.prototype.setGhostDead = function() {
+	for(var i = 0; i < 4; i++) {
+		// console.log("dead: ", this.innerBlocks[i].row + this.ghostRow, this.innerBlocks[i].col + this.col);
+		this.board.setDead(this.innerBlocks[i].row + this.ghostRow, this.innerBlocks[i].col + this.col);
+	}
+};
+
+Tetromino.prototype.setGhostAlive = function() {
+	for(var i = 0; i < 4; i++) {
+		// console.log("alive: ", this.innerBlocks[i].row + this.ghostRow, this.innerBlocks[i].col + this.col);
+		//console.log(this.innerBlocks[i].row + this.ghostRow, this.innerBlocks[i].col + this.col);
+		this.board.setAlive(this.innerBlocks[i].row + this.ghostRow, this.innerBlocks[i].col + this.col, GHOST_BLOCK);
+	}
+};

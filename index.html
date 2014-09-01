@@ -6,16 +6,19 @@
 	</title>
 	<style>
 		body {
-		}
-		#board {
-			width: auto;
+		}/*
+		#board_wrapper {
+			width: 300px;
 			margin: auto;
+			border: 2px solid black;
+		}*/
+		#board {
 			font-family: monospace;
 			font-size: 14px;
 			position: relative;
 			z-index: 100;
-		}
-		#board/*, #board th, #board td.board_title */{
+			width: 300px;
+			margin: auto;
 			border: 2px solid black;
 			border-collapse: collapse;
 		}
@@ -25,43 +28,42 @@
 			-webkit-box-sizing:border-box;
 			width: 30px;
 			height: 30px;
+			color: transparent;
 		}
-		.block_i, .block_j, .block_l, .block_z, .block_o, .block_s, .block_t {
+		.block_i, .block_j, .block_l, .block_z, .block_o, .block_s, .block_t{
 			border: 2px solid black;
-			font-weight: bold;
+		}
+		.block_g {
+			border: 1px solid #CCC;
 		}
 		.block_x { /* black */
 			background-color: #EEE;
-			color: #EEE;
 		}
 		.block_i { /* cyan */
 			background-color: #81F7F3;
-			color: #81F7F3;
 		}
 		.block_j { /* blue */
 			background-color: #58ACFA;
-			color: #58ACFA;
 		}
 		.block_l { /* orange */
 			background-color: #FFBF00;
-			color: #FFBF00;
 		}
 		.block_o { /* yellow */
 			background-color: #FFF300;
-			color: #FFF300;
 		}
 		.block_s { /*green*/
 			background-color: #2EFE2E;
-			color: #2EFE2E;
 		}
 		.block_t { /*purple*/
 			background-color: #D358F7;
-			color: #D358F7;
 		}
 		.block_z { /*red*/
 			background-color: #FA5858;
-			color: #FA5858;
 		}
+		.block_g {
+			background-color: #FFF;
+		}
+
 		#game_over {
 			font-size: 40px;
 			color: red;

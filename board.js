@@ -89,14 +89,43 @@ Board.prototype.addTetromino = function(tetromino) {
 	for(var i = 0; i < 4; i++) {
 		this.setAlive(tetromino.blocks[i].row, tetromino.blocks[i].col, tetromino.blocks[i].blockType);
 	}
+	tetromino.findGhostRow();
+	tetromino.setGhostAlive();
 	return true;
 };
 
 Board.prototype.setDead = function(row, col) {
-	this.theBoard[row][col].blockType = DEFAULT_BLOCK;
+	this.theBoard[row][col].setDead()
 };
 
 Board.prototype.setAlive = function(row, col, blockType) {
-	this.theBoard[row][col].blockType = blockType;
+	this.theBoard[row][col].setAlive(blockType);
 };
 
+Board.prototype.findFullLine = function() {
+	var isFull = true;
+	var count = 0;
+	for(var i = 0; i < this.height; i++) {
+		isFull = true;
+		for(var j = 0; j < this.width; j++) {
+			if(this.theBoard[i][j].isDead()) {
+				isFull = false;
+				break;
+			}
+		}
+		if(isFull) {
+			count++;
+			// remove this row;
+			this.removeRow(i);
+			console.log(i, " row removed!");
+		}
+	}
+};
+
+Board.prototype.removeRow = function(row) {
+	for(var i = row; i > 2; i--) {
+		for(var j = 0; j < this.width; j++) {
+			this.theBoard[i][j].blockType = this.theBoard[i - 1][j].blockType;
+		}
+	}
+};

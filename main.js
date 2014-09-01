@@ -13,7 +13,7 @@ function gameLoop(myInt) {
 	if(!nextBlock.down()) {
 		// cannot go down anymore
 		// check for keydown during lockDelay
-
+		tetrisBoard.findFullLine();
 		// move on to next block
 		activateKeyboard();
 		nextBlock = level.getNextBlock();
