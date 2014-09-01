@@ -86,11 +86,12 @@ Board.prototype.addTetromino = function(tetromino) {
 		}
 	}
 
+	tetromino.findGhostRow();
+	tetromino.setGhostAlive();
+
 	for(var i = 0; i < 4; i++) {
 		this.setAlive(tetromino.blocks[i].row, tetromino.blocks[i].col, tetromino.blocks[i].blockType);
 	}
-	tetromino.findGhostRow();
-	tetromino.setGhostAlive();
 	return true;
 };
 
@@ -120,6 +121,7 @@ Board.prototype.findFullLine = function() {
 			console.log(i, " row removed!");
 		}
 	}
+	return count;
 };
 
 Board.prototype.removeRow = function(row) {

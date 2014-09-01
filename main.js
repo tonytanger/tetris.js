@@ -1,10 +1,13 @@
 var tetrisBoard = new Board();
-updateBoard();
 
 var level = new Level();
+var score = new Score();
+updateBoard();
+console.log(score);
 
 //game loop
 var nextBlock = level.getNextBlock();
+var blockInQueue = level.getNextBlock();
 tetrisBoard.addTetromino(nextBlock);
 activateKeyboard();
 updateBoard();
@@ -13,10 +16,11 @@ function gameLoop(myInt) {
 	if(!nextBlock.down()) {
 		// cannot go down anymore
 		// check for keydown during lockDelay
-		tetrisBoard.findFullLine();
+		score.addScore(tetrisBoard.findFullLine());
+		//show score
 		// move on to next block
 		activateKeyboard();
-		nextBlock = level.getNextBlock();
+		nextBlock = blockInQueue;
 		if(!tetrisBoard.addTetromino(nextBlock)) {
 			clearInterval(myInt);
 			deactivateKeyboard();
@@ -24,13 +28,15 @@ function gameLoop(myInt) {
 			document.getElementById("game_over").style.zIndex = "150";
 		}
 		updateBoard();
+		blockInQueue = level.getNextBlock();
 	}
 	updateBoard();
 }
 var downInterval = setInterval(function() {gameLoop(downInterval)}, level.lockDelay);
 
 function updateBoard() {
-	document.getElementById("board_wrapper").innerHTML = tetrisBoard.print()
+	document.getElementById("score").innerHTML = score.print();
+	document.getElementById("board_wrapper").innerHTML = tetrisBoard.print();
 }
 
 		//document.getElementById("board").innerHTML = tetrisBoard.print();

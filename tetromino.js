@@ -22,7 +22,7 @@ function Tetromino() {
 Tetromino.prototype.print = function() {
 	var returnString = "";
 	for(var i = 0; i < 4; i++) {
-		returnString += this.blocks[i].print();
+		returnString += this.innerblocks[i].print();
 	}
 	return returnString;
 };
@@ -245,11 +245,16 @@ Tetromino.prototype.rotate = function() {
 	for(var i = 0; i < 4; i++) {
 
 		// check if new location is out of bound
-		if(this.innerBlocks[i].row + this.row > 22 || this.innerBlocks[i].row + this.row < 0 || this.innerBlocks[i].col + this.col > 9 || this.innerBlocks[i].col + this.col < 0) {
+		if(this.innerBlocks[i].row + this.row >= this.board.height || this.innerBlocks[i].row + this.row < 0 || this.innerBlocks[i].col + this.col >= this.board.width || this.innerBlocks[i].col + this.col < 0) {
 			cancelRotate(this);
 			console.warn("rotation: out of bound!");
 			//reset ghost
 			this.setGhostAlive();
+			for(var i = 0; i < 4; i++) {
+				this.blocks[i].row = this.innerBlocks[i].row + this.row;
+				this.blocks[i].col = this.innerBlocks[i].col + this.col;
+				this.board.setAlive(this.blocks[i].row, this.blocks[i].col, this.blockType);
+			}
 			return false;
 		}
 
@@ -270,6 +275,11 @@ Tetromino.prototype.rotate = function() {
 			console.warn("rotation: location occupied!");
 			//reset ghost
 			this.setGhostAlive();
+			for(var i = 0; i < 4; i++) {
+				this.blocks[i].row = this.innerBlocks[i].row + this.row;
+				this.blocks[i].col = this.innerBlocks[i].col + this.col;
+				this.board.setAlive(this.blocks[i].row, this.blocks[i].col, this.blockType);
+			}
 			return false;
 		}
 	}
@@ -357,7 +367,7 @@ Tetromino.prototype.findGhostRow = function() {
 			// check if current blocks[i] is the lower one
 			if(this.innerBlocks[i].col === this.innerBlocks[j].col && this.innerBlocks[i].row + 1 === this.innerBlocks[j].row) {
 				isBottom = false;
-				console.log(this.innerBlocks[i].row, this.innerBlocks[i].col);
+				// console.log(this.innerBlocks[i].row, this.innerBlocks[i].col);
 				break;
 			}
 		}
@@ -384,7 +394,7 @@ Tetromino.prototype.findGhostRow = function() {
 		}
 		// console.log("count me 4 times.");
 	}
-	console.log("Ghost Row: " + this.ghostRow);
+	console.log("Ghost Row: " + this.ghostRow + " and Regular Row: " + this.row);
 	return this.ghostRow;
 };
 
