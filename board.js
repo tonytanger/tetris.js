@@ -63,19 +63,6 @@ Board.prototype.getBlock = function(row, col) {
 Board.prototype.addTetromino = function(tetromino) {
 	// get x and y of the blocks, and add it to the board.
 	tetromino.board = this;
-	// var trow = tetromino.row;
-	// var tcol = tetromino.col;
-	// var b0row = tetromino.blocks[0].row;
-	// var b0col = tetromino.blocks[0].col;
-
-	// var b1row = tetromino.blocks[1].row;
-	// var b1col = tetromino.blocks[1].col;
-
-	// var b2row = tetromino.blocks[2].row;
-	// var b2col = tetromino.blocks[2].col;
-
-	// var b3row = tetromino.blocks[3].row;
-	// var b3col = tetromino.blocks[3].col;
 
 	// check if any of the blocks are already occupied.
 	for(var i = 0; i < 4; i++) {
@@ -95,6 +82,15 @@ Board.prototype.addTetromino = function(tetromino) {
 	return true;
 };
 
+Board.prototype.removeTetromino = function(tetromino) {
+	tetromino.setGhostDead();
+	for(var i = 0; i < 4; i++) {
+		this.setDead(tetromino.blocks[i].row, tetromino.blocks[i].col, tetromino.blocks[i].blockType);
+	}
+	tetromino.reset();
+	return true;
+};
+
 Board.prototype.setDead = function(row, col) {
 	this.theBoard[row][col].setDead()
 };
@@ -103,6 +99,9 @@ Board.prototype.setAlive = function(row, col, blockType) {
 	this.theBoard[row][col].setAlive(blockType);
 };
 
+// findFullLines () -> int
+// loop through theBoard array and return the number of rows are full
+
 Board.prototype.findFullLine = function() {
 	var isFull = true;
 	var count = 0;
@@ -110,6 +109,7 @@ Board.prototype.findFullLine = function() {
 		isFull = true;
 		for(var j = 0; j < this.width; j++) {
 			if(this.theBoard[i][j].isDead()) {
+				// as soon as one block is dead, no need to see the rest
 				isFull = false;
 				break;
 			}

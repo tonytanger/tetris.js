@@ -20,10 +20,12 @@ function Tetromino() {
 }
 
 Tetromino.prototype.print = function() {
-	var returnString = "";
-	for(var i = 0; i < 4; i++) {
-		returnString += this.innerblocks[i].print();
-	}
+	// var returnString = "<table id='nextTetromino'>";
+	// for(var i = 0; i < 4; i++) {
+	// 	returnString += this.innerblocks[i].print();
+	// }
+	// returnString += "</table>";
+	var returnString = this.blockType;
 	return returnString;
 };
 
@@ -412,4 +414,8 @@ Tetromino.prototype.setGhostAlive = function() {
 		//console.log(this.innerBlocks[i].row + this.ghostRow, this.innerBlocks[i].col + this.col);
 		this.board.setAlive(this.innerBlocks[i].row + this.ghostRow, this.innerBlocks[i].col + this.col, GHOST_BLOCK);
 	}
+};
+
+Tetromino.prototype.reset = function() {
+
 };

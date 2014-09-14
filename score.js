@@ -1,20 +1,25 @@
-function Score() {
+function Score(level) {
 	this.points = 0;
-	this.level = 1;
-	this.linesCleared = 9;
+	this.level = level;
+	this.linesCleared = 0;
 }
 
 Score.prototype.print = function() {
 	var returnString = "Score: " + this.points;
-	returnString += "<br />Level: " + this.level;
+	returnString += "<br />Level: " + this.level.getLevel();
 	returnString += "<br />Lines Cleared: " + this.linesCleared;
 	return returnString;
 };
 
 Score.prototype.addScore = function(num_lines) {
-	this.points += this.round(num_lines * num_lines * 10 * this.level);
-	if(this.linesCleared % 10 + num_lines >= 10) {
+	// example: num_lines 3 lines, current level 3
+	// 3 * 3 * 10 * 3 = 270
+	this.points += this.round(num_lines * num_lines * 10 * this.level.getLevel());
+	// example: lines cleared 9, num lines 1
+	// 9 % 10 = 9 + 1 >= 10
+	if((this.linesCleared % 10) + num_lines >= 10) {
 		this.levelUp();
+		console.log(this.linesCleared + num_lines);
 	}
 	console.log("Number of Lines: " + num_lines);
 	this.linesCleared += num_lines;
@@ -33,7 +38,6 @@ Score.prototype.round = function(num) {
 };
 
 Score.prototype.levelUp = function() {
-	this.level++;
-	level.levelUp();
+	this.level.levelUp();
 	return true;
 };

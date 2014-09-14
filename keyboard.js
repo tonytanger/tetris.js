@@ -1,40 +1,50 @@
+function Keyboard() {
+	this.handler = 0;
+}
 
-var handler = function(event) {
-	switch(event.keyCode) {
+Keyboard.prototype.onKeyDown = function(key, tetromino) {
+	switch(key) {
 		case 38:
 		//up
-			nextBlock.rotate();
-			break;
+			tetromino.rotate();
+			console.log("rotate");
+			return 0;
 		case 37:
 		//left
-			nextBlock.left();
-			break;
+			tetromino.left();
+			console.log("left");
+			return 0;
 		case 39:
 		// right
-			nextBlock.right();
-			break;
+			tetromino.right();
+			console.log("right");
+			return 0;
 		case 40:
 		//down
-			nextBlock.down();
-			break;
+			tetromino.down();
+			console.log("down");
+			return 0;
 		case 32:
-		// space
-			nextBlock.drop();
-			deactivateKeyboard();
-			gameLoop(downInterval);
-			break;
-		case 88:
-		// special
-			clearInterval(downInterval);
-		break;
+		// space: drop
+			tetromino.drop();
+			console.log("drop");
+			return 1;
+		case 80:
+		// p: pause
+			console.log("pause");
+			return 2;
+		case 67:
+		// c: hold
+			console.log("hold");
+			return 3;
 	}
-	updateBoard();
 };
 
-function activateKeyboard() {
-	document.addEventListener('keydown', handler);
-}
+Keyboard.prototype.init = function(handler) {
+	this.handler = handler;
+	document.addEventListener('keydown', this.handler);
+};
 
-function deactivateKeyboard() {
-	document.removeEventListener('keydown', handler);	
-}
+Keyboard.prototype.remove = function(){
+	document.removeEventListener('keydown', this.handler);
+};

@@ -46,6 +46,17 @@ IBlock.prototype.state3 = function() {
 	console.log("I block state 3");
 };
 
+IBlock.prototype.reset = function() {
+	this.blockType = 'I';
+	this.row = 4;
+	this.col = 3;
+	this.state0();
+	for(var i = 0; i < 4; i++) {
+		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
+		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
+	}
+};
+
 //J
 function JBlock() {
 	Tetromino.call(this);
@@ -57,7 +68,6 @@ function JBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
-
 }
 
 JBlock.prototype = Object.create(Tetromino.prototype);
@@ -96,6 +106,17 @@ JBlock.prototype.state3 = function() {
 	console.log("J block state 3");
 };
 
+JBlock.prototype.reset = function() {
+	this.blockType = 'J';
+	this.row = 3;
+	this.col = 3;
+	this.state0();
+	for(var i = 0; i < 4; i++) {
+		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
+		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
+	}	
+};
+
 //L
 function LBlock() {
 	Tetromino.call(this);
@@ -107,7 +128,6 @@ function LBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
-
 }
 
 LBlock.prototype = Object.create(Tetromino.prototype);
@@ -146,6 +166,17 @@ LBlock.prototype.state3 = function() {
 	console.log("L block state 3");
 };
 
+LBlock.prototype.reset = function() {
+	this.blockType = 'L';
+	this.row = 3;
+	this.col = 3;
+	this.state0();
+	for(var i = 0; i < 4; i++) {
+		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
+		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
+	}
+};
+
 //S
 function SBlock() {
 	Tetromino.call(this);
@@ -156,7 +187,6 @@ function SBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
-
 }
 
 SBlock.prototype = Object.create(Tetromino.prototype);
@@ -195,6 +225,17 @@ SBlock.prototype.state3 = function() {
 	console.log("S block state 3");
 };
 
+SBlock.prototype.reset = function() {
+	Tetromino.call(this);
+	this.blockType = 'S';
+	this.row = 3;
+	this.col = 3;	this.state0();
+	for(var i = 0; i < 4; i++) {
+		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
+		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
+	}
+};
+
 //Z
 function ZBlock() {
 	Tetromino.call(this);
@@ -206,7 +247,6 @@ function ZBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
-
 }
 
 ZBlock.prototype = Object.create(Tetromino.prototype);
@@ -245,6 +285,17 @@ ZBlock.prototype.state3 = function() {
 	console.log("Z block state 3");
 };
 
+ZBlock.prototype.reset = function() {
+	this.blockType = 'Z';
+	this.row = 3;
+	this.col = 3;
+	this.state0();
+	for(var i = 0; i < 4; i++) {
+		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
+		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
+	}
+};
+
 //O
 function OBlock() {
 	Tetromino.call(this);
@@ -256,7 +307,6 @@ function OBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
-
 }
 
 OBlock.prototype = Object.create(Tetromino.prototype);
@@ -295,6 +345,17 @@ OBlock.prototype.state3 = function() {
 	console.log("O block state 3");
 };
 
+OBlock.prototype.reset = function() {
+	this.blockType = 'O';
+	this.row = 2;
+	this.col = 4;
+	this.state0();
+	for(var i = 0; i < 4; i++) {
+		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
+		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
+	}
+};
+
 //T
 function TBlock() {
 	Tetromino.call(this);
@@ -306,7 +367,6 @@ function TBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
-
 }
 
 TBlock.prototype = Object.create(Tetromino.prototype);
@@ -345,3 +405,13 @@ TBlock.prototype.state3 = function() {
 	console.log("T block state 3");
 };
 
+TBlock.prototype.reset = function() {
+	this.blockType = 'T';
+	this.row = 3;
+	this.col = 3;
+	this.state0();
+	for(var i = 0; i < 4; i++) {
+		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
+		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
+	}
+};
