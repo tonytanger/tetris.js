@@ -23,6 +23,18 @@ Game.prototype.start = function() {
 	this.tetrominoInQueue = this.level.getNextTetromino();
 	this.board.addTetromino(this.nextTetromino);
 	_this = this;
+	window.addEventListener("blur", function() {
+												clearTimeout(_this.timeout);
+												_this.keyboard.remove();
+												console.log("BLUR");
+											});
+	window.addEventListener("focus", function() {
+												if(!_this.pause) {
+													_this.downLoop();
+													_this.keyboard.init(_this.keyHandler);
+												}
+												console.log("FOCUS");
+											});
 	this.keyHandler = function(event) {
 		var val = _this.keyboard.onKeyDown(event.keyCode, _this.nextTetromino);
 		_this.lastKeyPress = new Date().getTime();
@@ -41,14 +53,19 @@ Game.prototype.start = function() {
 				break;
 			case 2:
 				// pause/unpause
-				if(_this.pause) {
-					_this.downLoop();
-					_this.pause = false;
-				} else {
-					clearTimeout(_this.timeout);
-					// disable keyboard???
-					_this.pause = true;
-				}
+				clearTimeout(_this.timeout);
+				_this.keyboard.remove();
+				// add new keyboard handler to detect "p"
+				var unpauseMachine = function(event) {
+					if(_this.keyboard.onKeyDown(event.keyCode, 0) === 2) {
+						_this.downLoop();
+						_this.keyboard.init(_this.keyHandler);
+						_this.pause = false;
+						document.removeEventListener("keydown", unpauseMachine);
+					}
+				};
+				document.addEventListener("keydown", unpauseMachine);
+				_this.pause = true;
 				break;
 			case 3:
 				//hold
