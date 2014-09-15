@@ -363,7 +363,7 @@ Tetromino.prototype.rotate = function() {
 		case 2:
 			// 180 degree position
 			this.state3();
-			// check (0,0)
+			// check (0, 0)
 			rotationFound = checkAlive(this, 0, 0);
 			if(rotationFound) {
 				// do rotation
@@ -411,7 +411,7 @@ Tetromino.prototype.rotate = function() {
 		case 3:
 			this.state0();
 			// 270 degree position
-			// check (0,0)
+			// check (0, 0)
 			rotationFound = checkAlive(this, 0, 0);
 			if(rotationFound) {
 				// do rotation
@@ -451,7 +451,7 @@ Tetromino.prototype.rotate = function() {
 
 			// none worked		
 			// reset ghost
-			if(!rotationFound) {				
+			if(!rotationFound) {
 				cancelRotation(this);
 				return false;
 			}

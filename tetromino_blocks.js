@@ -61,6 +61,209 @@ IBlock.prototype.reset = function() {
 	}
 };
 
+IBlock.prototype.rotate = function() {
+	//set ghost dead
+	this.setGhostDead();
+
+	//set current positions dead
+	for(var i = 0; i < 4; i++) {
+		this.board.setDead(this.blocks[i].row, this.blocks[i].col);
+	}
+
+	//check if new position is full
+	var rotationFound = true;
+
+	// for non I or O block
+	switch(this.state) {
+		case 0:
+			// original position
+			this.state1();
+			// check (0,0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+
+			// check (-2, 0)
+			rotationFound = checkAlive(this, -2, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -2, 0);
+				return true;
+			}
+
+			// check (+1, 0)
+			rotationFound = checkAlive(this, 1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, 0);
+				return true;
+			}
+			// check (-2, -1)
+			rotationFound = checkAlive(this, -2, -1);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -2, -1);
+				return true;
+			}
+			// check (+1, +2)
+			rotationFound = checkAlive(this, 1, 2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, 2);
+				return true;
+			}
+			// none worked
+			// reset ghost
+			if(!rotationFound) {
+				cancelRotation(this);
+				return false;
+			}
+			return false;
+		case 1:
+			this.state2();
+			// 90 degree position
+			// check (0,0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+			// check (-1, 0)
+			rotationFound = checkAlive(this, -1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, 0);
+				return true;
+			}
+			// check (+2, 0)
+			rotationFound = checkAlive(this, 2, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 2, 0);
+				return true;
+			}
+			// check (-1, +2)
+			rotationFound = checkAlive(this, -1, 2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, 2);
+				return true;
+			}
+			// check (+2, -1)
+			rotationFound = checkAlive(this, 2, -1);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 2, -1);
+				return true;
+			}
+			// none worked
+			// reset ghost
+			if(!rotationFound) {
+				cancelRotation(this);
+				return false;
+			}
+			return false;
+		case 2:
+			// 180 degree position
+			this.state3();
+			// check (0,0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+			// check (+2, 0)
+			rotationFound = checkAlive(this, 2, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 2, 0);
+				return true;
+			}
+			// check (-1, 0)
+			rotationFound = checkAlive(this, -1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, 0);
+				return true;
+			}
+			// check (+2, +1)
+			rotationFound = checkAlive(this, 2, 1);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 2, 1);
+				return true;
+			}
+			// check (-1, -2)
+			rotationFound = checkAlive(this, -1, -2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, -2);
+				return true;
+			}
+
+			// none worked
+			// reset ghost
+			if(!rotationFound) {				
+				cancelRotation(this);
+				return false;
+			}
+			return false;
+		case 3:
+			this.state0();
+			// 270 degree position
+			// check (0,0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+			// check (+1, 0)
+			rotationFound = checkAlive(this, 1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, 0);
+				return true;
+			}
+			// check (-2, 0)
+			rotationFound = checkAlive(this, -2, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -2, 0);
+				return true;
+			}
+
+			// check (+1, -2)
+			rotationFound = checkAlive(this, 1, -2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, -2);
+				return true;
+			}
+
+			// check (-2, +1)
+			rotationFound = checkAlive(this, -2, 1);	
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -2, 1);
+				return true;
+			}
+
+			// none worked
+			// reset ghost
+			if(!rotationFound) {
+				cancelRotation(this);
+				return false;
+			}
+			return false;
+	}
+};
+
 //J
 function JBlock() {
 	Tetromino.call(this);
