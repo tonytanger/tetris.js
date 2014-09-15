@@ -29,26 +29,6 @@ Tetromino.prototype.print = function() {
 	return returnString;
 };
 
-// Tetromino.prototype.state0 = function() {
-// 	this.state =  0;
-// 	console.log(this.state);
-// };
-
-// Tetromino.prototype.state1 = function() {
-// 	this.state =  1;
-// 	console.log(this.state);
-// };
-
-// Tetromino.prototype.state2 = function() {
-// 	this.state =  2;
-// 	console.log(this.state);
-// };
-
-// Tetromino.prototype.state3 = function() {
-// 	this.state =  3;
-// 	console.log(this.state);
-// };
-
 Tetromino.prototype.down = function() {
 	// check if it is already at the very bottom
 	for(var i = 0; i < 4; i++) {
