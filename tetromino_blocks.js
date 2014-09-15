@@ -15,6 +15,7 @@ IBlock.prototype = Object.create(Tetromino.prototype);
 IBlock.prototype.constructor = IBlock;
 
 IBlock.prototype.state0 = function() {
+	this.state = 0;
 	this.innerBlocks[0].setCoord(-2, 0);
 	this.innerBlocks[1].setCoord(-2, 1);
 	this.innerBlocks[2].setCoord(-2, 2);
@@ -23,6 +24,7 @@ IBlock.prototype.state0 = function() {
 };
 
 IBlock.prototype.state1 = function() {
+	this.state = 1;
 	this.innerBlocks[0].setCoord(-3, 2);
 	this.innerBlocks[1].setCoord(-2, 2);
 	this.innerBlocks[2].setCoord(-1, 2);
@@ -31,6 +33,7 @@ IBlock.prototype.state1 = function() {
 };
 
 IBlock.prototype.state2 = function() {
+	this.state = 2;
 	this.innerBlocks[0].setCoord(-1, 0);
 	this.innerBlocks[1].setCoord(-1, 1);
 	this.innerBlocks[2].setCoord(-1, 2);
@@ -39,6 +42,7 @@ IBlock.prototype.state2 = function() {
 };
 
 IBlock.prototype.state3 = function() {
+	this.state = 3;
 	this.innerBlocks[0].setCoord(-3, 1);
 	this.innerBlocks[1].setCoord(-2, 1);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -54,6 +58,209 @@ IBlock.prototype.reset = function() {
 	for(var i = 0; i < 4; i++) {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
+	}
+};
+
+IBlock.prototype.rotate = function() {
+	//set ghost dead
+	this.setGhostDead();
+
+	//set current positions dead
+	for(var i = 0; i < 4; i++) {
+		this.board.setDead(this.blocks[i].row, this.blocks[i].col);
+	}
+
+	//check if new position is full
+	var rotationFound = true;
+
+	// for non I or O block
+	switch(this.state) {
+		case 0:
+			// original position
+			this.state1();
+			// check (0,0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+
+			// check (-2, 0)
+			rotationFound = checkAlive(this, -2, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -2, 0);
+				return true;
+			}
+
+			// check (+1, 0)
+			rotationFound = checkAlive(this, 1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, 0);
+				return true;
+			}
+			// check (-2, -1)
+			rotationFound = checkAlive(this, -2, -1);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -2, -1);
+				return true;
+			}
+			// check (+1, +2)
+			rotationFound = checkAlive(this, 1, 2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, 2);
+				return true;
+			}
+			// none worked
+			// reset ghost
+			if(!rotationFound) {
+				cancelRotation(this);
+				return false;
+			}
+			return false;
+		case 1:
+			this.state2();
+			// 90 degree position
+			// check (0,0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+			// check (-1, 0)
+			rotationFound = checkAlive(this, -1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, 0);
+				return true;
+			}
+			// check (+2, 0)
+			rotationFound = checkAlive(this, 2, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 2, 0);
+				return true;
+			}
+			// check (-1, +2)
+			rotationFound = checkAlive(this, -1, 2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, 2);
+				return true;
+			}
+			// check (+2, -1)
+			rotationFound = checkAlive(this, 2, -1);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 2, -1);
+				return true;
+			}
+			// none worked
+			// reset ghost
+			if(!rotationFound) {
+				cancelRotation(this);
+				return false;
+			}
+			return false;
+		case 2:
+			// 180 degree position
+			this.state3();
+			// check (0,0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+			// check (+2, 0)
+			rotationFound = checkAlive(this, 2, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 2, 0);
+				return true;
+			}
+			// check (-1, 0)
+			rotationFound = checkAlive(this, -1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, 0);
+				return true;
+			}
+			// check (+2, +1)
+			rotationFound = checkAlive(this, 2, 1);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 2, 1);
+				return true;
+			}
+			// check (-1, -2)
+			rotationFound = checkAlive(this, -1, -2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, -2);
+				return true;
+			}
+
+			// none worked
+			// reset ghost
+			if(!rotationFound) {				
+				cancelRotation(this);
+				return false;
+			}
+			return false;
+		case 3:
+			this.state0();
+			// 270 degree position
+			// check (0,0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+			// check (+1, 0)
+			rotationFound = checkAlive(this, 1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, 0);
+				return true;
+			}
+			// check (-2, 0)
+			rotationFound = checkAlive(this, -2, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -2, 0);
+				return true;
+			}
+
+			// check (+1, -2)
+			rotationFound = checkAlive(this, 1, -2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, -2);
+				return true;
+			}
+
+			// check (-2, +1)
+			rotationFound = checkAlive(this, -2, 1);	
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -2, 1);
+				return true;
+			}
+
+			// none worked
+			// reset ghost
+			if(!rotationFound) {
+				cancelRotation(this);
+				return false;
+			}
+			return false;
 	}
 };
 
@@ -75,6 +282,7 @@ JBlock.prototype = Object.create(Tetromino.prototype);
 JBlock.prototype.constructor = JBlock;
 
 JBlock.prototype.state0 = function() {
+	this.state = 0;
 	this.innerBlocks[0].setCoord(-2, 0);
 	this.innerBlocks[1].setCoord(-1, 0);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -83,6 +291,7 @@ JBlock.prototype.state0 = function() {
 };
 
 JBlock.prototype.state1 = function() {
+	this.state = 1;
 	this.innerBlocks[0].setCoord(-2, 1);
 	this.innerBlocks[1].setCoord(-2, 2);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -91,6 +300,7 @@ JBlock.prototype.state1 = function() {
 };
 
 JBlock.prototype.state2 = function() {
+	this.state = 2;
 	this.innerBlocks[0].setCoord(0, 2);
 	this.innerBlocks[1].setCoord(-1, 2);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -99,6 +309,7 @@ JBlock.prototype.state2 = function() {
 };
 
 JBlock.prototype.state3 = function() {
+	this.state = 3;
 	this.innerBlocks[0].setCoord(0, 0);
 	this.innerBlocks[1].setCoord(0, 1);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -135,6 +346,7 @@ LBlock.prototype = Object.create(Tetromino.prototype);
 LBlock.prototype.constructor = LBlock;
 
 LBlock.prototype.state0 = function() {
+	this.state = 0;
 	this.innerBlocks[0].setCoord(-2, 2);
 	this.innerBlocks[1].setCoord(-1, 2);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -143,6 +355,7 @@ LBlock.prototype.state0 = function() {
 };
 
 LBlock.prototype.state1 = function() {
+	this.state = 1;
 	this.innerBlocks[0].setCoord(0, 2);
 	this.innerBlocks[1].setCoord(0, 1);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -151,6 +364,7 @@ LBlock.prototype.state1 = function() {
 };
 
 LBlock.prototype.state2 = function() {
+	this.state = 2;
 	this.innerBlocks[0].setCoord(0, 0);
 	this.innerBlocks[1].setCoord(-1, 0);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -159,6 +373,7 @@ LBlock.prototype.state2 = function() {
 };
 
 LBlock.prototype.state3 = function() {
+	this.state = 3;
 	this.innerBlocks[0].setCoord(-2, 0);
 	this.innerBlocks[1].setCoord(-2, 1);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -194,6 +409,7 @@ SBlock.prototype = Object.create(Tetromino.prototype);
 SBlock.prototype.constructor = SBlock;
 
 SBlock.prototype.state0 = function() {
+	this.state = 0;
 	this.innerBlocks[0].setCoord(-1, 0);
 	this.innerBlocks[1].setCoord(-1, 1);
 	this.innerBlocks[2].setCoord(-2, 1);
@@ -202,6 +418,7 @@ SBlock.prototype.state0 = function() {
 };
 
 SBlock.prototype.state1 = function() {
+	this.state = 1;
 	this.innerBlocks[0].setCoord(0, 2);
 	this.innerBlocks[1].setCoord(-1, 2);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -210,6 +427,7 @@ SBlock.prototype.state1 = function() {
 };
 
 SBlock.prototype.state2 = function() {
+	this.state = 2;
 	this.innerBlocks[0].setCoord(0, 0);
 	this.innerBlocks[1].setCoord(0, 1);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -218,6 +436,7 @@ SBlock.prototype.state2 = function() {
 };
 
 SBlock.prototype.state3 = function() {
+	this.state = 3;
 	this.innerBlocks[0].setCoord(0, 1);
 	this.innerBlocks[1].setCoord(-1, 1);
 	this.innerBlocks[2].setCoord(-1, 0);
@@ -254,6 +473,7 @@ ZBlock.prototype = Object.create(Tetromino.prototype);
 ZBlock.prototype.constructor = ZBlock;
 
 ZBlock.prototype.state0 = function() {
+	this.state = 0;
 	this.innerBlocks[0].setCoord(-1, 2);
 	this.innerBlocks[1].setCoord(-1, 1);
 	this.innerBlocks[2].setCoord(-2, 1);
@@ -262,6 +482,7 @@ ZBlock.prototype.state0 = function() {
 };
 
 ZBlock.prototype.state1 = function() {
+	this.state = 1;
 	this.innerBlocks[0].setCoord(0, 1);
 	this.innerBlocks[1].setCoord(-1, 1);
 	this.innerBlocks[2].setCoord(-1, 2);
@@ -270,6 +491,7 @@ ZBlock.prototype.state1 = function() {
 };
 
 ZBlock.prototype.state2 = function() {
+	this.state = 2;
 	this.innerBlocks[0].setCoord(0, 2);
 	this.innerBlocks[1].setCoord(0, 1);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -278,6 +500,7 @@ ZBlock.prototype.state2 = function() {
 };
 
 ZBlock.prototype.state3 = function() {
+	this.state = 3;
 	this.innerBlocks[0].setCoord(0, 0);
 	this.innerBlocks[1].setCoord(-1, 0);
 	this.innerBlocks[2].setCoord(-1, 1);
@@ -314,6 +537,7 @@ OBlock.prototype = Object.create(Tetromino.prototype);
 OBlock.prototype.constructor = OBlock;
 
 OBlock.prototype.state0 = function() {
+	this.state = 0;
 	this.innerBlocks[0].setCoord(0, 0);
 	this.innerBlocks[1].setCoord(-1, 0);
 	this.innerBlocks[2].setCoord(0, 1);
@@ -322,6 +546,7 @@ OBlock.prototype.state0 = function() {
 };
 
 OBlock.prototype.state1 = function() {
+	this.state = 1;
 	this.innerBlocks[0].setCoord(0, 0);
 	this.innerBlocks[1].setCoord(-1, 0);
 	this.innerBlocks[2].setCoord(0, 1);
@@ -330,6 +555,7 @@ OBlock.prototype.state1 = function() {
 };
 
 OBlock.prototype.state2 = function() {
+	this.state = 2;
 	this.innerBlocks[0].setCoord(0, 0);
 	this.innerBlocks[1].setCoord(-1, 0);
 	this.innerBlocks[2].setCoord(0, 1);
@@ -338,6 +564,7 @@ OBlock.prototype.state2 = function() {
 };
 
 OBlock.prototype.state3 = function() {
+	this.state = 3;
 	this.innerBlocks[0].setCoord(0, 0);
 	this.innerBlocks[1].setCoord(-1, 0);
 	this.innerBlocks[2].setCoord(0, 1);
@@ -355,6 +582,10 @@ OBlock.prototype.reset = function() {
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
 };
+
+OBlock.prototype.rotate = function() {
+	return true;
+}
 
 //T
 function TBlock() {
@@ -374,6 +605,7 @@ TBlock.prototype = Object.create(Tetromino.prototype);
 TBlock.prototype.constructor = TBlock;
 
 TBlock.prototype.state0 = function() {
+	this.state = 0;
 	this.innerBlocks[0].setCoord(-1, 0);
 	this.innerBlocks[1].setCoord(-1, 1);
 	this.innerBlocks[2].setCoord(-1, 2);
@@ -382,6 +614,7 @@ TBlock.prototype.state0 = function() {
 };
 
 TBlock.prototype.state1 = function() {
+	this.state = 1;
 	this.innerBlocks[0].setCoord(-2, 1);
 	this.innerBlocks[1].setCoord(-1, 1);
 	this.innerBlocks[2].setCoord(0, 1);
@@ -390,6 +623,7 @@ TBlock.prototype.state1 = function() {
 };
 
 TBlock.prototype.state2 = function() {
+	this.state = 2;
 	this.innerBlocks[0].setCoord(-1, 2);
 	this.innerBlocks[1].setCoord(-1, 1);
 	this.innerBlocks[2].setCoord(-1, 0);
@@ -398,6 +632,7 @@ TBlock.prototype.state2 = function() {
 };
 
 TBlock.prototype.state3 = function() {
+	this.state = 3;
 	this.innerBlocks[0].setCoord(0, 1);
 	this.innerBlocks[1].setCoord(-1, 1);
 	this.innerBlocks[2].setCoord(-2, 1);

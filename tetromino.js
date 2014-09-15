@@ -29,30 +29,6 @@ Tetromino.prototype.print = function() {
 	return returnString;
 };
 
-Tetromino.prototype.rotate = function() {
-	if(++this.state > 3) {
-		this.state = 0;
-	}
-	switch(this.state) {
-		case 0:
-			this.state0();
-		break;
-		case 1:
-			this.state1();
-		break;
-		case 2:
-			this.state0();
-		break;
-		case 3:
-			this.state3();
-		break;
-		default:
-			this.state0();
-		break;
-	}
-	return this.state;
-};
-
 Tetromino.prototype.down = function() {
 	// check if it is already at the very bottom
 	for(var i = 0; i < 4; i++) {
@@ -154,7 +130,8 @@ Tetromino.prototype.left = function() {
 };
 
 Tetromino.prototype.right = function() {
-		// check if it is already at the very right
+
+	// check if it is already at the very right
 	for(var i = 0; i < 4; i++) {
 		if(this.blocks[i].col === this.board.width - 1) {
 			console.warn("Cannot go right any further!");
@@ -211,125 +188,281 @@ Tetromino.prototype.drop = function() {
 	return true;
 };
 
-Tetromino.prototype.state0 = function() {
-	this.innerBlocks[0].setCoord(0, 0);
-	this.innerBlocks[1].setCoord(0, 0);
-	this.innerBlocks[2].setCoord(0, 0);
-	this.innerBlocks[3].setCoord(0, 0);
-	console.error("You shouldn't have done this!");
-};
+function checkAlive(tetromino, colDif, rowDif) {
+	for(var i = 0; i < 4; i++) {
+		if( tetromino.innerBlocks[i].row + tetromino.row - rowDif >= tetromino.board.height || 
+			tetromino.innerBlocks[i].row + tetromino.row - rowDif < 0 || 
+			tetromino.innerBlocks[i].col + tetromino.col + colDif >= tetromino.board.width || 
+			tetromino.innerBlocks[i].col + tetromino.col + colDif < 0 ) {
+			// new location is out of bound
+			return false;
+		} else if( tetromino.board.getBlock(tetromino.innerBlocks[i].row + tetromino.row - rowDif, tetromino.innerBlocks[i].col + tetromino.col + colDif).isAlive() ) { 
+			// new location is already occupied
+			return false;
+		}
+	}
+	return true;
+}
+
+function doRotation(tetromino, colDif, rowDif) {
+	tetromino.col += colDif;
+	tetromino.row += -rowDif;
+
+	// find new ghost
+	tetromino.findGhostRow();
+	tetromino.setGhostAlive();
+
+	// set new coordinates and set them alive
+	for(var i = 0; i < 4; i++) {
+		tetromino.blocks[i].row = tetromino.innerBlocks[i].row + tetromino.row;
+		tetromino.blocks[i].col = tetromino.innerBlocks[i].col + tetromino.col;
+		tetromino.board.setAlive(tetromino.blocks[i].row, tetromino.blocks[i].col, tetromino.blockType);
+	}
+
+	console.log("Rotate!");
+	return true;
+}
+
+// rotate logic:
+
+// "remove" all blocks from board
+// remember where they are
+// check all 5 new locations
+// as soon as one works. do that
+// draw it at new location
+
+// if none works, draw it back at old location
 
 Tetromino.prototype.rotate = function() {
 	//set ghost dead
-
 	this.setGhostDead();
-	//check if new position is full
-	switch(this.state) {
-		case 0:
-			this.state1();
-		break;
-		case 1:
-			this.state2();
-		break;
-		case 2:
-			this.state3();
-		break;
-		case 3:
-			this.state0();
-		break;
-	}
-	this.state++;
-	if(this.state > 3) {
-		this.state = 0;
-	}
 
-	// check if new location is occupied
-	for(var i = 0; i < 4; i++) {
-
-		// check if new location is out of bound
-		if(this.innerBlocks[i].row + this.row >= this.board.height || this.innerBlocks[i].row + this.row < 0 || this.innerBlocks[i].col + this.col >= this.board.width || this.innerBlocks[i].col + this.col < 0) {
-			cancelRotate(this);
-			console.warn("rotation: out of bound!");
-			//reset ghost
-			this.setGhostAlive();
-			for(var i = 0; i < 4; i++) {
-				this.blocks[i].row = this.innerBlocks[i].row + this.row;
-				this.blocks[i].col = this.innerBlocks[i].col + this.col;
-				this.board.setAlive(this.blocks[i].row, this.blocks[i].col, this.blockType);
-			}
-			return false;
-		}
-
-		// check if new location is one of the old locations
-
-		var newLocation = true;
-
-		for(var j = 0; j < 4; j++) {
-			if(this.innerBlocks[i].row + this.row === this.blocks[j].row && this.innerBlocks[i].col + this.col === this.blocks[j].col) {
-				newLocation = false;
-			}
-		}
-		
-		// check if new location is occupied
-		if(newLocation && this.board.getBlock(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col).isAlive()) {
-			// new location is occupied.
-			cancelRotate(this);
-			console.warn("rotation: location occupied!");
-			//reset ghost
-			this.setGhostAlive();
-			for(var i = 0; i < 4; i++) {
-				this.blocks[i].row = this.innerBlocks[i].row + this.row;
-				this.blocks[i].col = this.innerBlocks[i].col + this.col;
-				this.board.setAlive(this.blocks[i].row, this.blocks[i].col, this.blockType);
-			}
-			return false;
-		}
-	}
-
-	//TODO: wall kick
-
-	//do the rotation
-
-	//NOTE: cannot do setGhostDead() here because rotation already happened to innerBlocks
-
-	// set old positions dead
+	//set current positions dead
 	for(var i = 0; i < 4; i++) {
 		this.board.setDead(this.blocks[i].row, this.blocks[i].col);
 	}
 
-	// find new ghost
-	this.findGhostRow();
-	this.setGhostAlive();
+	//check if new position is full
+	var rotationFound = true;
 
-	// set new coordinates and set them alive
-	for(var i = 0; i < 4; i++) {
-		this.blocks[i].row = this.innerBlocks[i].row + this.row;
-		this.blocks[i].col = this.innerBlocks[i].col + this.col;
-		this.board.setAlive(this.blocks[i].row, this.blocks[i].col, this.blockType);
+	// for non I or O block
+	switch(this.state) {
+		case 0:
+			// original position
+			this.state1();
+			// check (0,0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+
+			// check (-1, 0)
+			rotationFound = checkAlive(this, -1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, 0);
+				return true;
+			}
+
+			// check (-1, +1)
+			rotationFound = checkAlive(this, -1, 1);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, 1);
+				return true;
+			}
+			// check (0, -2)
+			rotationFound = checkAlive(this, 0, -2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, -2);
+				return true;
+			}
+			// check (-1, -2)
+			rotationFound = checkAlive(this, -1, -2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, -2);
+				return true;
+			}
+			// none worked
+			// reset ghost
+			if(!rotationFound) {
+				cancelRotation(this);
+				return false;
+			}
+			return false;
+		case 1:
+			this.state2();
+			// 90 degree position
+			// check (0,0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+			// check (+1, 0)
+			rotationFound = checkAlive(this, 1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, 0);
+				return true;
+			}
+			// check (+1, -1)
+			rotationFound = checkAlive(this, 1, -1);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, -1);
+				return true;
+			}
+			// check (0, +2)
+			rotationFound = checkAlive(this, 0, 2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 2);
+				return true;
+			}
+			// check (+1, +2)
+			rotationFound = checkAlive(this, 1, 2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, 2);
+				return true;
+			}
+			// none worked
+			// reset ghost
+			if(!rotationFound) {
+
+				cancelRotation(this);
+				return false;
+			}
+			return false;
+		case 2:
+			// 180 degree position
+			this.state3();
+			// check (0, 0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+			// check (+1, 0)
+			rotationFound = checkAlive(this, 1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, 0);
+				return true;
+			}
+			// check (+1, +1)
+			rotationFound = checkAlive(this, 1, 1);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, 1);
+				return true;
+			}
+
+			// check (0, -2)
+			rotationFound = checkAlive(this, 0, -2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, -2);
+				return true;
+			}
+
+			// check (+1, -2)
+			rotationFound = checkAlive(this, 1, -2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 1, -2);
+				return true;
+			}
+
+			// none worked
+			// reset ghost
+			if(!rotationFound) {				
+				cancelRotation(this);
+				return false;
+			}
+			return false;
+		case 3:
+			this.state0();
+			// 270 degree position
+			// check (0, 0)
+			rotationFound = checkAlive(this, 0, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 0);
+				return true;
+			}
+			// check (-1, 0)
+			rotationFound = checkAlive(this, -1, 0);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, 0);
+				return true;
+			}
+			// check (-1, -1)
+			rotationFound = checkAlive(this, -1, -1);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, -1);
+				return true;
+			}
+
+			// check (0, +2)
+			rotationFound = checkAlive(this, 0, 2);
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, 0, 2);
+				return true;
+			}
+
+			// check (-1, +2)
+			rotationFound = checkAlive(this, -1, 2);	
+			if(rotationFound) {
+				// do rotation
+				doRotation(this, -1, 2);
+				return true;
+			}
+
+			// none worked		
+			// reset ghost
+			if(!rotationFound) {
+				cancelRotation(this);
+				return false;
+			}
+			return false;
 	}
-	console.log("Rotate!");
-	return true;
 };
 
-function cancelRotate(tetromino) {
+function cancelRotation(tetromino) {
 	switch(tetromino.state) {
 		case 0:
 			tetromino.state3();
-		break;
+			break;
 		case 1:
 			tetromino.state0();
-		break;
+			break;
 		case 2:
 			tetromino.state1();
-		break;
+			break;
 		case 3:
 			tetromino.state2();
-		break;
+			break;
 	}
-	tetromino.state--;
-	if(tetromino.state < 0) {
-		tetromino.state = 3;
+
+	tetromino.setGhostAlive();
+
+	for(var i = 0; i < 4; i++) {
+		tetromino.blocks[i].row = tetromino.innerBlocks[i].row + tetromino.row;
+		tetromino.blocks[i].col = tetromino.innerBlocks[i].col + tetromino.col;
+		tetromino.board.setAlive(tetromino.blocks[i].row, tetromino.blocks[i].col, tetromino.blockType);
 	}
+	console.log("Rotation Failed");
 }
 
 Tetromino.prototype.findGhostRow = function() {
@@ -416,6 +549,4 @@ Tetromino.prototype.setGhostAlive = function() {
 	}
 };
 
-Tetromino.prototype.reset = function() {
-
-};
+Tetromino.prototype.reset = function() {};
