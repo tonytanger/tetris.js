@@ -4,90 +4,39 @@
 	<title>
 		Tetris
 	</title>
-	<style>
-		body {
-		}/*
-		#board_wrapper {
-			width: 300px;
-			margin: auto;
-			border: 2px solid black;
-		}*/
-		#board {
-			font-family: monospace;
-			font-size: 14px;
-			position: relative;
-			z-index: 100;
-			width: 300px;
-			margin: auto;
-			border: 2px solid black;
-			border-collapse: collapse;
-		}
-		#board td {
-			box-sizing:border-box;
-			-moz-box-sizing:border-box;
-			-webkit-box-sizing:border-box;
-			width: 30px;
-			height: 30px;
-			color: transparent;
-		}
-		.block_i, .block_j, .block_l, .block_z, .block_o, .block_s, .block_t{
-			border: 2px solid black;
-		}
-		.block_g {
-			border: 1px solid #CCC;
-		}
-		.block_x { /* black */
-			background-color: #EEE;
-		}
-		.block_i { /* cyan */
-			background-color: #81F7F3;
-		}
-		.block_j { /* blue */
-			background-color: #58ACFA;
-		}
-		.block_l { /* orange */
-			background-color: #FFBF00;
-		}
-		.block_o { /* yellow */
-			background-color: #FFF300;
-		}
-		.block_s { /*green*/
-			background-color: #2EFE2E;
-		}
-		.block_t { /*purple*/
-			background-color: #D358F7;
-		}
-		.block_z { /*red*/
-			background-color: #FA5858;
-		}
-		.block_g {
-			background-color: #FFF;
-		}
-
-		#game_over {
-			font-size: 40px;
-			color: red;
-			text-shadow: -2px 2px 1px #000;
-			position: relative;
-			z-index: 50;
-			text-align: center;
-			top: -325px;
-		}
-
-	</style>
+	<link rel="stylesheet" href="style.css" >
 </head>
 <body>
-	<div id="board_wrapper">
+	<div id="leftCol">
+		<div id="holdBoard">
+		
+		</div>
 
+		<div id="scoreBoard">
+		
+		</div>
 	</div>
-	<div id="score">
+	<div id="centerCol">
+		<div id="boardBoard">
+
+		</div>
 	</div>
-	<div id="next_piece">
+	<div id="rightCol">
+		<div id="queueBoard">
+		
+		</div>	
 	</div>
+	<div id="bottomRow">
+		<div id="helpBoard">
+		</div>
+	</div>
+	
 	<div id="game_over">
 		GAME OVER!
 	</div>
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="game.js"></script>
+<script src="display.js"></script>
 <script src="block.js"></script>
 <script src="board.js"></script>
 <script src="tetromino.js"></script>

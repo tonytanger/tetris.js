@@ -1,6 +1,8 @@
 /**
 * Abstract Class Tetromino
 */
+var DEFAULT_COLOR = "white";
+
 function Tetromino() {
 	this.blockType = 'I';
 	// bottom right corner
@@ -17,6 +19,7 @@ function Tetromino() {
 		this.innerBlocks[i] = new Block();
 	}
 	this.ghostRow = BOARD_HEIGHT + 1;
+	this.color = DEFAULT_COLOR;
 }
 
 Tetromino.prototype.print = function() {
@@ -25,8 +28,45 @@ Tetromino.prototype.print = function() {
 	// 	returnString += this.innerblocks[i].print();
 	// }
 	// returnString += "</table>";
-	var returnString = this.blockType;
+	returnString = "<table>";
+	returnString += "<tr>";
+		returnString += "<td id='r3c0'></td>";
+		returnString += "<td id='r3c1'></td>";
+		returnString += "<td id='r3c2'></td>";
+		returnString += "<td id='r3c3'></td>";
+	returnString += "</tr>";
+	returnString += "<tr>";
+		returnString += "<td id='r2c0'></td>";
+		returnString += "<td id='r2c1'></td>";
+		returnString += "<td id='r2c2'></td>";
+		returnString += "<td id='r2c3'></td>";
+	returnString += "</tr>";
+	returnString += "<tr>";
+		returnString += "<td id='r1c0'></td>";
+		returnString += "<td id='r1c1'></td>";
+		returnString += "<td id='r1c2'></td>";
+		returnString += "<td id='r1c3'></td>";
+	returnString += "</tr>";
+	returnString += "<tr>";
+		returnString += "<td id='r0c0'></td>";
+		returnString += "<td id='r0c1'></td>";
+		returnString += "<td id='r0c2'></td>";
+		returnString += "<td id='r0c3'></td>";
+	returnString += "</tr>";
+	returnString += "</table>";
 	return returnString;
+};
+
+Tetromino.prototype.draw = function(target) {
+	for(var i = 0; i < 4; i++) {
+		for (var j = 0; j < 4; j++) {
+			$(target + " #r" + i + "c" + j).css("background-color", DEFAULT_COLOR);
+		}
+	}
+	for(var i = 0; i < 4; i++) {
+		$(target + " #r" + (this.innerBlocks[i].row * -1) + "c" + this.innerBlocks[i].col).css("background-color", this.color);
+		console.log($(target + " #r" + this.innerBlocks[i].row + "c" + this.innerBlocks[i].col));
+	}
 };
 
 Tetromino.prototype.down = function() {
