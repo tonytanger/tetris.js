@@ -6,19 +6,18 @@ function Game() {
 	this.nextTetromino = 0;
 	this.tetrominoInQueue = 0;
 	this.tetrominoInHold = 0;
-	this.scoreDOM = 0;
-	this.boardDOM = 0;
 	this.keyHandler = 0;
 	this.timeout = 0;
+	this.display = new Display();
 	this.pause = false;
 	this.hold = false;
 	this.lastKeyPress = new Date().getTime();
-	this.gameOver =false;
+	this.gameOver = false;
 }
 
 Game.prototype.start = function() {
-	this.scoreDOM = "score";
-	this.boardDOM = "board_wrapper";
+	this.display.load("#boardBoard", "#scoreBoard", "#holdBoard", "#queueBoard", "#helpBoard", this.board, this.score, this.tetrominoInHold, this.tetrominoInQueue);
+	this.display.showHelp();
 	this.nextTetromino = this.level.getNextTetromino();
 	this.tetrominoInQueue = this.level.getNextTetromino();
 	this.board.addTetromino(this.nextTetromino);
@@ -41,14 +40,14 @@ Game.prototype.start = function() {
 		switch(val) {
 			case 0:
 				// rotate, left, right, down
-				_this.updateBoard();
+				_this.display.updateBoard();
 				break;
 			case 1:
 				// drop
 				if(_this.onDrop()) {					
 					clearTimeout(_this.timeout);
 					_this.downLoop();
-					_this.updateBoard();
+					_this.display.updateAll(_this.tetrominoInHold, _this.tetrominoInQueue);
 				}
 				break;
 			case 2:
@@ -105,7 +104,9 @@ Game.prototype.start = function() {
 						_this.hold = true;
 					}
 				}
-				_this.updateBoard();
+				_this.display.updateBoard();
+				_this.display.updateHold(_this.tetrominoInHold);
+				_this.display.updateQueue(_this.tetrominoInQueue);
 				break;
 			default:
 				// something else
@@ -114,7 +115,7 @@ Game.prototype.start = function() {
 	};
 	this.keyboard.init(this.keyHandler);
 	this.downLoop();
-	this.updateBoard();
+	this.display.updateAll(this.tetrominoInHold, this.tetrominoInQueue);
 };
 
 /**
@@ -138,9 +139,10 @@ Game.prototype.downLoop = function() {
 			//check lockDelay. Was last keypress less than lockDelay? If so. don't onDrop yet. call this function and return.
 			if(new Date().getTime() - _this.lastKeyPress >= _this.level.lockDelay) {
 				_this.onDrop();
+				_this.display.updateAll(_this.tetrominoInHold, _this.tetrominoInQueue);
 			}
 		}
-		_this.updateBoard();
+		_this.display.updateBoard();
 		if(!_this.gameOver) _this.downLoop();
 		console.log(_this.level.lockDelay);
 	}, _this.level.lockDelay);

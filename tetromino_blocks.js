@@ -8,6 +8,7 @@ function IBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#81F7F3";
 }
 
 IBlock.prototype = Object.create(Tetromino.prototype);
@@ -59,6 +60,7 @@ IBlock.prototype.reset = function() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#81F7F3";
 };
 
 IBlock.prototype.rotate = function() {
@@ -275,6 +277,7 @@ function JBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#58ACFA";
 }
 
 JBlock.prototype = Object.create(Tetromino.prototype);
@@ -325,7 +328,8 @@ JBlock.prototype.reset = function() {
 	for(var i = 0; i < 4; i++) {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
-	}	
+	}
+	this.color = "#58ACFA";
 };
 
 //L
@@ -339,6 +343,7 @@ function LBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#FFBF00";
 }
 
 LBlock.prototype = Object.create(Tetromino.prototype);
@@ -390,6 +395,7 @@ LBlock.prototype.reset = function() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#FFBF00";
 };
 
 //S
@@ -402,6 +408,7 @@ function SBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#2EFE2E";
 }
 
 SBlock.prototype = Object.create(Tetromino.prototype);
@@ -453,6 +460,7 @@ SBlock.prototype.reset = function() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#2EFE2E";
 };
 
 //Z
@@ -466,6 +474,7 @@ function ZBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#FA5858";
 }
 
 ZBlock.prototype = Object.create(Tetromino.prototype);
@@ -517,19 +526,21 @@ ZBlock.prototype.reset = function() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#FA5858";
 };
 
 //O
 function OBlock() {
 	Tetromino.call(this);
 	this.blockType = 'O';
-	this.row = 2;
-	this.col = 4;
+	this.row = 3;
+	this.col = 3;
 	this.state0();
 	for(var i = 0; i < 4; i++) {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#FFF300";
 }
 
 OBlock.prototype = Object.create(Tetromino.prototype);
@@ -538,37 +549,37 @@ OBlock.prototype.constructor = OBlock;
 
 OBlock.prototype.state0 = function() {
 	this.state = 0;
-	this.innerBlocks[0].setCoord(0, 0);
-	this.innerBlocks[1].setCoord(-1, 0);
-	this.innerBlocks[2].setCoord(0, 1);
-	this.innerBlocks[3].setCoord(-1, 1);
+	this.innerBlocks[0].setCoord(-1, 1);
+	this.innerBlocks[1].setCoord(-2, 1);
+	this.innerBlocks[2].setCoord(-1, 2);
+	this.innerBlocks[3].setCoord(-2, 2);
 	console.log("O block state 0");
 };
 
 OBlock.prototype.state1 = function() {
 	this.state = 1;
-	this.innerBlocks[0].setCoord(0, 0);
-	this.innerBlocks[1].setCoord(-1, 0);
-	this.innerBlocks[2].setCoord(0, 1);
-	this.innerBlocks[3].setCoord(-1, 1);
+	this.innerBlocks[0].setCoord(-1, 1);
+	this.innerBlocks[1].setCoord(-2, 1);
+	this.innerBlocks[2].setCoord(-1, 2);
+	this.innerBlocks[3].setCoord(-2, 2);
 	console.log("O block state 1");
 };
 
 OBlock.prototype.state2 = function() {
 	this.state = 2;
-	this.innerBlocks[0].setCoord(0, 0);
-	this.innerBlocks[1].setCoord(-1, 0);
-	this.innerBlocks[2].setCoord(0, 1);
-	this.innerBlocks[3].setCoord(-1, 1);
+	this.innerBlocks[0].setCoord(-1, 1);
+	this.innerBlocks[1].setCoord(-2, 1);
+	this.innerBlocks[2].setCoord(-1, 2);
+	this.innerBlocks[3].setCoord(-2, 2);
 	console.log("O block state 2");
 };
 
 OBlock.prototype.state3 = function() {
 	this.state = 3;
-	this.innerBlocks[0].setCoord(0, 0);
-	this.innerBlocks[1].setCoord(-1, 0);
-	this.innerBlocks[2].setCoord(0, 1);
-	this.innerBlocks[3].setCoord(-1, 1);
+	this.innerBlocks[0].setCoord(-1, 1);
+	this.innerBlocks[1].setCoord(-2, 1);
+	this.innerBlocks[2].setCoord(-1, 2);
+	this.innerBlocks[3].setCoord(-2, 2);
 	console.log("O block state 3");
 };
 
@@ -581,6 +592,7 @@ OBlock.prototype.reset = function() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#FFF300";
 };
 
 OBlock.prototype.rotate = function() {
@@ -598,6 +610,7 @@ function TBlock() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#D358F7";
 }
 
 TBlock.prototype = Object.create(Tetromino.prototype);
@@ -649,4 +662,5 @@ TBlock.prototype.reset = function() {
 		this.blocks[i].blockType = this.innerBlocks[i].blockType = this.blockType;
 		this.blocks[i].setCoord(this.innerBlocks[i].row + this.row, this.innerBlocks[i].col + this.col);
 	}
+	this.color = "#D358F7";
 };
