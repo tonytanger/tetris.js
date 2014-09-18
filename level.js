@@ -47,7 +47,7 @@ Level.prototype.levelUp = function() {
 	if(this.lockDelay >= 500) {
 		this.lockDelay -= 100;
 	} else {
-		this.lockDelay -= 50;
+		this.lockDelay -= 30;
 	}
 	if(this.level < 15) {
 		this.level++;

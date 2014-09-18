@@ -35,6 +35,10 @@ Game.prototype.start = function() {
 												console.log("FOCUS");
 											});
 	this.keyHandler = function(event) {
+		if ( event.keyCode >= 32 && event.keyCode <= 40 ) {
+	        console.log("Prevent Space");
+	        event.preventDefault();
+	    }
 		var val = _this.keyboard.onKeyDown(event.keyCode, _this.nextTetromino);
 		_this.lastKeyPress = new Date().getTime();
 		switch(val) {

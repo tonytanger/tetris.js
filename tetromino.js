@@ -65,7 +65,6 @@ Tetromino.prototype.draw = function(target) {
 	}
 	for(var i = 0; i < 4; i++) {
 		$(target + " #r" + (this.innerBlocks[i].row * -1) + "c" + this.innerBlocks[i].col).css("background-color", this.color);
-		console.log($(target + " #r" + this.innerBlocks[i].row + "c" + this.innerBlocks[i].col));
 	}
 };
 
