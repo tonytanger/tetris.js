@@ -1,4 +1,4 @@
 tetris.js
 =========
 
-Tetris written in javascript
+Tetris written in JavaScript
